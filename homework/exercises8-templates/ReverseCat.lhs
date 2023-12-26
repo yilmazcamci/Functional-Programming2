@@ -30,14 +30,39 @@ Case 2: xs = (a:as)
 IH: reverseCat as bs = reverse as ++ bs, for all bs.
 
     reverseCat (a:as) ys
-
-  = ...
-
+    ---------------- definition of reverseCat
+  = reverseCat as (a:ys)
+    ---------------- IH with bs = (a:ys)
+  = reverse as ++ (a:ys)
+    ---------------- definition of ++
+  = reverse as ++ (a:([] ++ ys))
+    ---------------- definition of ++
+  = reverse as ++ ((a:[]) ++ ys)
+    ---------------- definition of :
+  = reverse as ++ ([a] ++ ys)
+    ---------------- associativity of ++
+  = (reverse as ++ [a]) ++ ys
+    ---------------- definition of reverse
   = reverse (a:as) ++ ys
 
 
 -----------------------------------------------------
 To prove: reverse xs = reverse' xs
 
-...
+Case 1: xs = []
 
+    reverse' []
+  = reverseCat [] []
+  = []
+  = reverse []
+  
+  
+Case 2: xs = (a:as)
+IH: reverse as = reverse' as
+
+    reverse (a:as)
+  = reverse as ++ [a]
+  = reverseCat as [a] 
+  = reverseCat as (a:[])
+  = reverseCat (a:as) []
+  = reverse' (a:as)
