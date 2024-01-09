@@ -1,15 +1,22 @@
 {-# LANGUAGE InstanceSigs #-}
 module TraverseExpr where
 
-import Control.Monad.State -- or import State
+import Lenses
+import State -- or import State
 import Data.Foldable
 import Data.List 
 import Data.Maybe
 import qualified Data.Map as M
 
-data Expr var = Var var | Lit Integer | Op BinOp (Expr var) (Expr var)
+data Expr var = Var var 
+              | Lit Integer 
+              | Op BinOp (Expr var) (Expr var)
   deriving (Show,Eq)
-data BinOp    = Add | Sub | Mul | Div
+  
+data BinOp    = Add 
+              | Sub 
+              | Mul 
+              | Div
   deriving (Show,Eq)
 
 instance Functor Expr where
@@ -66,3 +73,18 @@ renameAllVars = traverse renameVar
 
 indexVars :: Expr String -> Expr Int
 indexVars e = evalState (renameAllVars e) M.empty
+
+-- 14.5
+-- 1.
+traverseVars :: (Applicative f) => (a -> f b) -> Expr a -> f (Expr b)
+traverseVars = traverse
+
+traverseLits :: Traversal (Expr a) Integer 
+traverseLits g (Var x)      = Var <$> pure x
+traverseLits g (Lit i)      = Lit <$> g i
+traverseLits g (Op b e1 e2) = Op <$> pure b <*> traverseLits g e1 <*> traverseLits g e2
+
+traverseBinOps :: Traversal (Expr a) BinOp 
+traverseBinOps g (Var x)    = Var <$> pure x
+traverseBinOps g (Lit i)    = Lit <$> pure i
+traverseBinOps g (Op b e1 e2) = Op <$> g b <*> traverseBinOps g e1 <*> traverseBinOps g e2

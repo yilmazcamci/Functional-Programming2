@@ -1,0 +1,56 @@
+\begin{code}
+
+last [x] = x
+last (_:xs) = last xs
+
+init [x] = []
+init (x:xs) = x : init xs
+
+(++) :: [a] -> [a] -> [a]
+[] ++ ys = ys
+(x:xs) ++ ys = x : (xs ++ ys)
+
+\end{code}
+
+(a) Prove that for all lists xs::[a], for all elements x::a
+
+> init (x:xs) ++ [last (x:xs)] = x:xs
+
+Proof: by induction to xs
+
+Case 1 : xs = [].
+
+init (x:[]) ++ [last (x:[])] = 
+----------- by 1st equation of init
+[] ++ [last (x:[])] = 
+       ----------- by 1st equation for last
+[] ++ [x] =
+--------- by first equation for (++) (where ys = [x])
+[x] = 
+--- by definition (sugar)
+x:[]
+
+Case 2: Assume xs = y:ys 
+
+IH: forall (x :: a). init (x:ys) ++ [last (x:ys)] = x:ys
+
+Then, for all x :: a:
+
+init (x:(y:ys)) ++ [last (x:(y:ys))] = 
+--------------- by equation 2 for init (where xs = y:ys), applies since y:ys /= []
+(x : init (y:ys)) ++ [last (x:(y:ys))] =
+                      --------------- by equation 2 for last (where xs = (y:ys)), applies since y:ys /= []
+(x : init (y:ys)) ++ [last (y:ys)] = 
+--------------------------------- by equation 2 for (++) (where xs = init (y:ys) and ys = last (y:ys))
+x: (init (y:ys) ++ [last (y:ys)])
+   ------------------------------ by IH (where x = y)
+x :(y:ys) = 
+   ------ by definition of xs
+x:xs
+
+Qed.
+
+
+
+
+

@@ -30,19 +30,19 @@ Case 2: xs = (a:as)
 IH: reverseCat as bs = reverse as ++ bs, for all bs.
 
     reverseCat (a:as) ys
-    ---------------- definition of reverseCat
+    ---------------------definition of reverseCat
   = reverseCat as (a:ys)
-    ---------------- IH with bs = (a:ys)
+    -------------------- IH with bs = (a:ys)
   = reverse as ++ (a:ys)
-    ---------------- definition of ++
+                     -- definition of ++
   = reverse as ++ (a:([] ++ ys))
-    ---------------- definition of ++
+                   ------------ definition of ++
   = reverse as ++ ((a:[]) ++ ys)
-    ---------------- definition of :
+                    ---- definition of :
   = reverse as ++ ([a] ++ ys)
-    ---------------- associativity of ++
+            ----------------- associativity of ++
   = (reverse as ++ [a]) ++ ys
-    ---------------- definition of reverse
+     ---------- definition of reverse
   = reverse (a:as) ++ ys
 
 
@@ -61,7 +61,9 @@ Case 2: xs = (a:as)
 IH: reverse as = reverse' as
 
     reverse (a:as)
+    ---------------- definition of reverseCat
   = reverse as ++ [a]
+    ---------------- definition of reverseCat
   = reverseCat as [a] 
   = reverseCat as (a:[])
   = reverseCat (a:as) []

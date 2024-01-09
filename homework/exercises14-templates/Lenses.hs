@@ -54,7 +54,7 @@ type Lens s a = forall f. (Functor f) => (a -> f a) -> (s -> f s)
 view :: Lens s a -> s -> a
 view lens = getConst . lens Const
 
-modify :: Lens s a -> (a -> a) -> s -> s
+modify :: Traversal s a -> (a -> a) -> s -> s
 modify = mapOf
 
 set :: Lens s a -> a -> s -> s
@@ -65,3 +65,4 @@ fst' :: (Functor f) => (a -> f a) -> (a,b) -> f (a, b) -- Lens (a,b) a
 fst' f (x,y) = (\x' -> (x',y)) <$> f x
 snd' :: (Functor f) => (b -> f b) -> (a,b) -> f (a, b) -- Lens (a,b) b
 snd' f (x,y) = (\y' -> (x,y')) <$> f y
+

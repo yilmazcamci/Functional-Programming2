@@ -18,4 +18,5 @@ Local definitions:
 2: To prove: leaves t = nodes t + 1
 By induction on t.
 
-Case ...
+Case t = Leaf
+
